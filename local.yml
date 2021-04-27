@@ -49,3 +49,12 @@ services:
     ports:
       - "7000:7000"
     command: /start-docs
+
+  pgadmin4:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    env_file:
+      - ./.envs/.local/.pgadmin4
+    ports:
+      - "5050:80"
+  
