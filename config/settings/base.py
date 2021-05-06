@@ -68,11 +68,17 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "allauth.socialaccount.providers.facebook",
+    "allauth.socialaccount.providers.github",
+    "allauth.socialaccount.providers.microsoft",
+    "notifications",
+    "fontawesome-free",
 ]
 
 LOCAL_APPS = [
     "mva_demo.users.apps.UsersConfig",
     # Your stuff: custom apps go here
+    "mva_demo.cms.apps.CmsConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -267,3 +273,4 @@ SOCIALACCOUNT_ADAPTER = "mva_demo.users.adapters.SocialAccountAdapter"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+DJANGO_NOTIFICATIONS_CONFIG = {'SOFT_DELETE': True}

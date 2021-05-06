@@ -4,6 +4,7 @@ Pillow==8.2.0  # https://github.com/python-pillow/Pillow
 argon2-cffi==20.1.0  # https://github.com/hynek/argon2_cffi
 redis==3.5.3  # https://github.com/andymccurdy/redis-py
 hiredis==1.1.0  # https://github.com/redis/hiredis-py
+fontawesome-free==5.15.3  # https://github.com/FortAwesome/Font-Awesome
 
 # Django
 # ------------------------------------------------------------------------------
@@ -13,3 +14,4 @@ django-model-utils==4.1.1  # https://github.com/jazzband/django-model-utils
 django-allauth==0.44.0  # https://github.com/pennersr/django-allauth
 django-crispy-forms==1.11.2  # https://github.com/django-crispy-forms/django-crispy-forms
 django-redis==4.12.1  # https://github.com/jazzband/django-redis
+django-notifications-hq==1.6.0  # https://github.com/django-notifications/django-notifications
