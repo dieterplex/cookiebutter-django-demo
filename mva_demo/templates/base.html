@@ -1,4 +1,4 @@
-{% load static i18n %}<!DOCTYPE html>
+{% load static i18n notifications_tags %}<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -35,6 +35,7 @@
       <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
       <!-- Your stuff: Third-party javascript libraries go here -->
+      <script src="{% static 'notifications/notify.js' %}"></script>
 
       <!-- place project specific Javascript in this file -->
       <script defer src="{% static 'js/project.js' %}"></script>
@@ -63,7 +64,25 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'cms:song_all' %}">Songs</a>
             </li>
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_authenticated %}              
+              <li class="nav-item">
+                <div class="dropdown">
+                  <a href="#" class="notification dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true">
+                    <i class="fa fa-bell"></i>
+                    <span class="badge">{% live_notify_badge %}</span>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    {% for notification in  user.notifications.unread %}
+                      <div>
+                        Message from <b>{{ notification.actor }}</b>
+                        <button class="dropdown-item" type="button">{{ notification.verb }} <b>{{notification.target}}</b></button>			
+                      </div>
+                      <div class="dropdown-divider"></div>
+                    {% endfor %}
+                  </div>
+                </div>
+                {% live_notify_list list_class="dropdown-menu" %}
+              </li>
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
                 <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
@@ -105,6 +124,7 @@
 
     {% block inline_javascript %}
     {# Script tags with only code, no src (defer by default) #}
+    {% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge' %}
     {% endblock inline_javascript %}
   </body>
 </html>

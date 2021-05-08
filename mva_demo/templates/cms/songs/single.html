@@ -8,15 +8,56 @@
     <main class="pt-5">
         <div class="row g-3">
             <div class="col-md-7 col-lg-7 ps-md-3 ps-lg-5">
-                <h1 class="mb-0 h4">{% if like %}<span class="fas fa-star" title="Unlike this song"></span>
-                                    {% else %}<span class="far fa-star" title="Add to Liked songs"></span>
-                                    {% endif %}{{ song.title }}</h1>
+                <h1 class="mb-0 h4"><i class="fa-star" title="like this song"></i>{{ song.title }}</h1>
+                {% csrf_token %}
                 <p />
-                <p><span class="lead"><a class="text-dark text-decoration-none" href="{{ song.category.get_absolute_url }}">{{ song.category }}</a></span> (Category)</p>
+                <p><span class="lead"><a class="text-dark text-decoration-none"
+                        href="{{ song.category.get_absolute_url }}">{{ song.category }}</a></span> (Category)</p>
                 <p><span class="lead">{{ song.author }}</span> (Author)</p>
                 <p>{{ song.description|slice:":140" }}...</p>
             </div>
         </div>
     </main>
 </div>
+
+<script>
+window.addEventListener("load", function() {
+    $("i.fa-star")
+        .addClass(
+            {% if like %}
+                "fas"  // filled star
+            {% else %}
+                "far"  // hollow star
+            {% endif %})
+        .click(function(){
+            tell_this_song($(this),
+                            ($(this).hasClass("far")) ? "like" : "unlike",
+                            '{{song.slug}}');
+        });
+});
+
+function tell_this_song(el, verb, slug) {
+    const defaults = {
+        'method': 'POST',
+        'credentials': 'same-origin',
+        'headers': new Headers({
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        }),
+    };
+    var api = "/cms/" + verb + "/" + slug + "/"
+    fetch(api, defaults)
+    .then(function(response) {
+        return response.json();      
+    }).then(function(data) {
+        console.log("Data is ok", data);
+        $(el).toggleClass("fas far")
+            .prop('title', (verb == 'like') ? 'Unlike this song' : 'Like this song');
+    }).catch(function(ex) {
+        console.log("parsing failed", ex);
+    });
+};
+</script>
 {% endblock %}
