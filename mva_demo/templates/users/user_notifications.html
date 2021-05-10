@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ user.username }}'s Notifications{% endblock %}
+{% block content %}
+{% for notice in notifications %}
+  <div class="col">
+    <div class="card shadow-sm">
+      <div class="card-body alert alert-{{ notice.level }}">
+          <a class="close pull-right fas fa-times"
+              href="{% url 'notifications:mark_as_read' notice.slug %}"></a>
+          
+          <p class="card-text">
+            <i class="icon-mail{% if notice.unread %}-alt{% endif %}"></i>
+            {{ notice.actor }} 
+            {{ notice.verb }}
+            {% if notice.target %}
+              of {{ notice.target }}
+            {% endif %}
+          </p>
+          
+          <small>{{ notice.timesince }} ago</small>
+          
+          <div>{{ notice.description|linebreaksbr }}</div>
+          
+          <div class="notice-actions">
+            {% for action in notice.data.actions %}
+              <a class="btn" href="{{ action.href }}">{{ action.title }}</a>
+            {% endfor %}
+          </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+{% endblock %}

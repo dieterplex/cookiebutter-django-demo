@@ -65,23 +65,25 @@
               <a class="nav-link" href="{% url 'cms:song_all' %}">Songs</a>
             </li>
             {% if request.user.is_authenticated %}              
-              <li class="nav-item">
-                <div class="dropdown">
-                  <a href="#" class="notification dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true">
-                    <i class="fa fa-bell"></i>
-                    <span class="badge">{% live_notify_badge %}</span>
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    {% for notification in  user.notifications.unread %}
-                      <div>
-                        Message from <b>{{ notification.actor }}</b>
-                        <button class="dropdown-item" type="button">{{ notification.verb }} <b>{{notification.target}}</b></button>			
-                      </div>
-                      <div class="dropdown-divider"></div>
-                    {% endfor %}
-                  </div>
+              <li class="nav-item btn-group dropdown">
+                <a href="{% url 'users:notification' %}" class="notification nav-link btn-secondary" role="button">
+                  <i class="fa fa-bell"></i>
+                  <span class="badge">{% live_notify_badge %}</span>
+                </a>
+                <a href="#" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" role="button"
+                    id="notifMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="sr-only">Toggle Dropdown</span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="notifMenu">
+                  {% for notification in  user.notifications.unread %}
+                    <div><i class="far fa-comment-dots"></i>
+                      Message from <b>{{ notification.actor }}</b>
+                      <a href="#" class="dropdown-item">{{ notification.verb }} <b>{{notification.target}}</b></a>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                  {% endfor %}
+                  <a class="dropdown-item" href="{% url 'notifications:mark_all_as_read' %}"><i class="fas fa-check-double" title="Mark all read"></i> Clear all</a>
                 </div>
-                {% live_notify_list list_class="dropdown-menu" %}
               </li>
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
